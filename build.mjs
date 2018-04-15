@@ -1,7 +1,7 @@
 import webpack from "webpack";
 
 webpack({
-	mode: "development",
+	mode: process.env.NODE_ENV || "production",
 	output: {
 		filename: "Vertex.js",
 		library: ["Vertex"]
