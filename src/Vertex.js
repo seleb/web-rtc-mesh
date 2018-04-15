@@ -25,6 +25,10 @@ export default class Vertex {
 		const connection = new RTCPeerConnection(this.peerConnectionConfig);
 		const peer = { connection, id };
 		connection.onicecandidate = ({ candidate }) => {
+			if (!candidate) {
+				console.warn("couldn't get ice candidate");
+				return;
+			}
 			console.log("sending ice candidate", candidate);
 			this.meshSocket.send({ to: id, ice: candidate });
 		};
