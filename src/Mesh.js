@@ -37,6 +37,8 @@ module.exports = class Mesh {
 
 			socket.onclose = () => {
 				console.log("disconnected socket");
+				this.idToSocket.delete(id);
+				this.socketToId.delete(socket);
 			};
 		});
 
