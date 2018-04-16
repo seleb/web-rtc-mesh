@@ -18,7 +18,7 @@ module.exports = class Mesh {
 				if (event.data === "ping") {
 					console.log("PING");
 					setTimeout(() => {
-						socket.send("pong");
+						socket.readyState === 1 && socket.send("pong");
 					}, pingPong);
 					return;
 				}
