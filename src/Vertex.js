@@ -13,9 +13,10 @@ export default class Vertex {
 	}
 
 	// send to one
-	send(id) {
+	send(id, message) {
 		const peer = this.peers[id];
 		if (peer && peer.dataChannel && peer.dataChannel.readyState === "open") {
+			const str = typeof message === "string" ? message : JSON.stringify(message);
 			peer.dataChannel.send(str);
 		}
 	}
