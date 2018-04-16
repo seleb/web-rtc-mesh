@@ -15,8 +15,8 @@ module.exports = class Mesh {
 			socket.send(JSON.stringify({ registered: id, peerConnectionConfig }));
 
 			socket.onmessage = event => {
-				if (event.data === "ping") {
-					console.log("PING");
+				if (event.data === "pong") {
+					console.log("PONG");
 					return;
 				}
 
@@ -54,7 +54,10 @@ module.exports = class Mesh {
 		setInterval(() => {
 			Array.from(this.ws.clients)
 				.filter(client => client.readyState === 1)
-				.forEach(client => client.send("ping"));
+				.forEach(client => {
+					console.log("PING");
+					client.send("ping")
+				});
 		}, pingPong);
 
 		console.log("Server started on", this.ws.address());

@@ -10,6 +10,7 @@ export default class Socket {
 		this.socketConnection.addEventListener("message", event => {
 			if (event.data === "ping") {
 				console.log("PING");
+				console.log("PONG");
 				this.socketConnection.send("pong");
 				return;
 			}
