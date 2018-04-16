@@ -15,5 +15,6 @@ module.exports = {
 	peerConnectionConfig: {
 		iceServers
 	},
-	port: process.env.PORT || 8080
+	port: process.env.PORT || 8080,
+	pingPong: process.env.PINGPONG || 60000
 };

@@ -5,10 +5,17 @@ export default class Socket {
 		this.socketConnection.addEventListener("open", connection => {
 			console.log("Opened socket connection", connection);
 			this.send({ start: true });
+			this.socketConnection.send("ping");
 		});
-		this.socketConnection.addEventListener("message", onSocketConnectionMessage);
-		this.socketConnection.addEventListener("message", onSocketMessage);
-
+		this.socketConnection.addEventListener("message", event => {
+			if (event.data === "pong") {
+				console.log("PONG");
+				this.socketConnection.send("ping");
+				return;
+			}
+			console.log("Got socket message", event);
+			onSocketMessage(event);
+		});
 	}
 
 	send(obj) {
@@ -19,7 +26,4 @@ export default class Socket {
 
 function onSocketConnectionError(connection) {
 	console.error("Errored socket connection", connection);
-}
-function onSocketConnectionMessage(message) {
-	console.log("Got socket message", message);
 }

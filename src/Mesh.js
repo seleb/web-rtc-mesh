@@ -1,5 +1,5 @@
 const { Server } = require("ws");
-const { peerConnectionConfig } = require("./config");
+const { peerConnectionConfig, pingPong } = require("./config");
 
 module.exports = class Mesh {
 	constructor(server) {
@@ -15,14 +15,20 @@ module.exports = class Mesh {
 			socket.send(JSON.stringify({ registered: id, peerConnectionConfig }));
 
 			socket.onmessage = event => {
-				console.log("message ", event.data);
-				if (JSON.parse(event.data).connect) {
-					console.log("connect", id);
-					socket.onmessage = message => this.routeMessage(message);
+				if (event.data === "ping") {
+					console.log("PING");
+					setTimeout(() => {
+						socket.send("pong");
+					}, pingPong);
+					return;
+				}
 
-					console.log("connecting sockets");
+				console.log("message", event.data);
+				const signal = JSON.parse(event.data);
+				if (signal.connect) {
+					console.log("connect", id);
 					Array.from(this.ws.clients)
-						.filter(client => client !== event.target) // don't connect to self
+						.filter(client => client !== socket) // don't connect to self
 						.filter(client => client.readyState === 1)
 						.forEach(peer => {
 							const peerId = this.socketToId.get(peer);
@@ -30,8 +36,13 @@ module.exports = class Mesh {
 							const connection = `${id}->${peerId}`;
 							console.log(connection);
 							peer.send(JSON.stringify({ connection, receive: id }));
-							event.target.send(JSON.stringify({ connection, call: peerId }));
+							socket.send(JSON.stringify({ connection, call: peerId }));
 						});
+				} else {
+					console.log("routing message", signal);
+					signal.from = id;
+					const peer = this.idToSocket.get(signal.to);
+					peer && peer.readyState === 1 && peer.send(JSON.stringify(signal));
 				}
 			};
 
@@ -43,14 +54,6 @@ module.exports = class Mesh {
 		});
 
 		console.log("Server started on", this.ws.address());
-	}
-
-	routeMessage(event) {
-		console.log("message ", event.data);
-		const signal = JSON.parse(event.data);
-		signal.from = this.socketToId.get(event.target);
-		const socket = this.idToSocket.get(signal.to);
-		socket && socket.readyState === 1 && socket.send(JSON.stringify(signal));
 	}
 
 };
