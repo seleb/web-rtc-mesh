@@ -17,9 +17,6 @@ module.exports = class Mesh {
 			socket.onmessage = event => {
 				if (event.data === "ping") {
 					console.log("PING");
-					setTimeout(() => {
-						socket.readyState === 1 && socket.send("pong");
-					}, pingPong);
 					return;
 				}
 
@@ -52,6 +49,13 @@ module.exports = class Mesh {
 				this.socketToId.delete(socket);
 			};
 		});
+
+
+		setInterval(() => {
+			Array.from(this.ws.clients)
+				.filter(client => client.readyState === 1)
+				.forEach(client => client.send("ping"));
+		}, pingPong);
 
 		console.log("Server started on", this.ws.address());
 	}
