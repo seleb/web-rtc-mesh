@@ -1,8 +1,9 @@
 import Socket from "./Socket";
 
 export default class Vertex {
-	constructor({ host, onData }) {
+	constructor({ host, onData, onClose }) {
 		this.onDataChannelMessage = onData;
+		this.onDataChannelClose = onClose;
 		this.meshSocket = new Socket({
 			host,
 			onSocketMessage: message => this.onSocketMessage(message)
@@ -11,6 +12,15 @@ export default class Vertex {
 		this.peers = {};
 	}
 
+	// send to one
+	send(id) {
+		const peer = this.peers[id];
+		if (peer && peer.dataChannel && peer.dataChannel.readyState === "open") {
+			peer.dataChannel.send(str);
+		}
+	}
+
+	// send to all
 	broadcast(message) {
 		const str = typeof message === "string" ? message : JSON.stringify(message);
 		Object.values(this.peers)
@@ -41,7 +51,7 @@ export default class Vertex {
 	setupDataChannel(channel) {
 		channel.onopen = dataChannelOnOpen;
 		channel.onmessage = this.onDataChannelMessage;
-		channel.onclose = dataChannelOnClose;
+		channel.onclose = this.onDataChannelClose;
 		return channel;
 	}
 
@@ -110,9 +120,6 @@ export default class Vertex {
 
 function dataChannelOnOpen(event) {
 	console.log("data channel opened", event);
-}
-function dataChannelOnClose(event) {
-	console.log("data channel closed", event);
 }
 
 function onIceConnectionStateChange(event) {
