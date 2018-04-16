@@ -5,7 +5,6 @@ export default class Socket {
 		this.socketConnection.addEventListener("open", connection => {
 			console.log("Opened socket connection", connection);
 			this.send({ start: true });
-			this.socketConnection.send("ping");
 		});
 		this.socketConnection.addEventListener("message", event => {
 			if (event.data === "ping") {
