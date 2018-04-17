@@ -9,6 +9,7 @@ Environment variables:
 - `PORT`: server port to use
 - `NUMB_USERNAME`/`NUMB_CREDENTIAL`: username/password for a `turn:numb.viagenie.ca` account (if there aren't both defined, only the public stun servers will be used)
 - `NODE_ENV`: `"production"` or `"development"`; passed to webpack
+- `PINGPONG`: delay in milliseconds between pings for the sake of keeping connections alive
 
 You can also edit `./src/config.js`.
 
