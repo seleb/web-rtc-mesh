@@ -3,18 +3,17 @@
 	"version": "1.0.0",
 	"description": "Signalling server + client for creating P2P data connections",
 	"repository": "github:seleb/web-rtc-mesh",
-	"main": "main.js",
 	"scripts": {
-		"build": "node --experimental-modules ./build.mjs"
+		"build": "node --experimental-modules ./build.mjs",
+		"start": "node --experimental-modules ./src/server/main.mjs"
 	},
 	"author": "Sean S. LeBlanc <sean.s.leblanc@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
-		"bufferutil": "^3.0.4",
 		"express": "^4.16.3",
-		"utf-8-validate": "^4.0.1",
-		"webrtc-adapter": "^6.1.5",
-		"ws": "^5.1.1"
+		"simple-peer": "^9.1.2",
+		"socket.io": "^2.1.1",
+		"socket.io-client": "^2.1.1"
 	},
 	"devDependencies": {
 		"webpack": "^4.5.0"

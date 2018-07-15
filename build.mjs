@@ -1,19 +1,21 @@
-import webpack from "webpack";
+import webpack from 'webpack';
 
 webpack({
-	mode: process.env.NODE_ENV || "production",
-	output: {
-		filename: "Vertex.js",
-		library: ["Vertex"]
+	target: 'web',
+	mode: process.env.NODE_ENV || 'production',
+	entry: {
+		client: './src/client/index.js',
 	},
-	target: "web"
+	output: {
+		library: 'Client',
+	}
 }, callback);
 
 
 function callback(error, stats) {
 	error && console.error(error);
 	console.log(stats.toString({
-		chunks: false,  // Makes the build much quieter
-		colors: true    // Shows colors in the console
+		chunks: false, // Makes the build much quieter
+		colors: true // Shows colors in the console
 	}));
 }
