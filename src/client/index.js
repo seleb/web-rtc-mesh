@@ -1,6 +1,6 @@
 export {
-	VERTEX_JOINED,
-	VERTEX_DATA,
+	JOINED,
+	DATA,
 }
 from './Vertex';
 

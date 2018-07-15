@@ -4,8 +4,8 @@ import {
 	EventEmitter
 } from 'events';
 
-export const VERTEX_JOINED = 'vertex:joined';
-export const VERTEX_DATA = 'vertex:data';
+export const JOINED = 'vertex:joined';
+export const DATA = 'vertex:data';
 
 export default class Vertex extends EventEmitter {
 	constructor({
@@ -40,7 +40,7 @@ export default class Vertex extends EventEmitter {
 					initiator: true,
 				});
 			});
-			this.emit(VERTEX_JOINED);
+			this.emit(JOINED);
 		});
 
 		this.peers = {};
@@ -93,7 +93,10 @@ export default class Vertex extends EventEmitter {
 		connection.on('data', dataRaw => {
 			const data = JSON.parse(dataRaw);
 			console.log('data', data);
-			this.emit(VERTEX_DATA, data);
+			this.emit(DATA, {
+				from: id,
+				data,
+			});
 		});
 		connection.on('error', error => {
 			console.error(error);
