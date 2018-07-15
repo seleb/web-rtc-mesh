@@ -1,8 +1,11 @@
 import {
 	peerConnectionConfig
 } from './config';
+import createDebug from 'debug';
 
-export default class Server {
+const debug = createDebug('web-rtc-mesh:mesh');
+
+export default class Mesh {
 	constructor(io) {
 		io.on('connection', socket => {
 
@@ -10,7 +13,7 @@ export default class Server {
 				room,
 				userId
 			}) => {
-				console.debug('join', {
+				debug('join', {
 					id: socket.id,
 					room,
 					userId,
@@ -36,7 +39,7 @@ export default class Server {
 				id,
 				data
 			}) => {
-				console.debug('dm', {
+				debug('dm', {
 					id,
 					data,
 				});
@@ -47,7 +50,7 @@ export default class Server {
 			});
 
 			socket.on('data', data => {
-				console.debug('data', {
+				debug('data', {
 					data
 				});
 

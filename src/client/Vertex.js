@@ -3,6 +3,9 @@ import SimplePeer from 'simple-peer';
 import {
 	EventEmitter
 } from 'events';
+import createDebug from 'debug';
+
+const debug = createDebug('web-rtc-mesh:vertex');
 
 export const JOIN = 'vertex:join';
 export const DATA = 'vertex:data';
@@ -30,7 +33,7 @@ export default class Vertex extends EventEmitter {
 			peerConnectionConfig,
 			connections
 		}) => {
-			console.log('joined', {
+			debug('joined', {
 				peerConnectionConfig,
 				connections
 			});
@@ -50,6 +53,14 @@ export default class Vertex extends EventEmitter {
 		});
 	}
 
+	setDebug(debug = false){
+		localStorage.debug = localStorage.debug || '';
+		localStorage.debug = localStorage.debug.replace(/web-rtc-mesh:\*/, '');
+		if(debug){
+			localStorage.debug += ' web-rtc-mesh:*';
+		}
+	}
+
 	disconnect() {
 		Object.values(this.peers)
 			.forEach(({
@@ -60,6 +71,7 @@ export default class Vertex extends EventEmitter {
 
 	// send to one
 	send(id, message) {
+		debug('send', id, message);
 		const {
 			peers: {
 				[id]: {
@@ -75,6 +87,7 @@ export default class Vertex extends EventEmitter {
 
 	// send to all
 	broadcast(message) {
+		debug('broadcast', message);
 		const str = JSON.stringify(message);
 		Object.values(this.peers)
 			.forEach(({
@@ -104,28 +117,31 @@ export default class Vertex extends EventEmitter {
 			});
 		});
 		connection.on('data', dataRaw => {
-			const data = JSON.parse(dataRaw);
-			console.log('data', data);
-			this.emit(DATA, {
+			const data = {
 				from: id,
-				data,
-			});
+				data: JSON.parse(dataRaw),
+			};
+			debug('data', data);
+			this.emit(DATA, data);
 		});
 		connection.on('error', error => {
-			console.error(error);
-			connection.destroy();
-			delete this.peers[id];
-			this.emit(CLOSE, {
+			const data = {
 				error,
 				id,
-			});
-		});
-		connection.on('close', () => {
+			};
+			debug('error', data);
 			connection.destroy();
 			delete this.peers[id];
-			this.emit(CLOSE, {
+			this.emit(CLOSE, data);
+		});
+		connection.on('close', () => {
+			const data = {
 				id,
-			});
+			};
+			debug('close', data);
+			connection.destroy();
+			delete this.peers[id];
+			this.emit(CLOSE, data);
 		});
 
 		this.peers[id] = peer;
