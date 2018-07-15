@@ -5,7 +5,8 @@ import {
 } from 'http';
 import createDebug from 'debug';
 import {
-	port
+	port,
+	pingPong
 } from './config';
 import Mesh from './Mesh';
 
@@ -22,7 +23,9 @@ const app = express()
 		});
 	});
 const server = createServer(app);
-const io = createIoServer(server);
+const io = createIoServer(server, {
+	pingInterval: pingPong,
+});
 
 new Mesh(io);
 
