@@ -84,10 +84,7 @@ export default class Vertex extends EventEmitter {
 		connection.on('signal', data => {
 			this.signaller.emit('dm', {
 				id,
-				data: {
-					signal: data,
-					from: this.signaller.id,
-				},
+				data,
 			});
 		});
 		connection.on('data', dataRaw => {

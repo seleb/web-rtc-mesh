@@ -40,7 +40,10 @@ export default class Server {
 					id,
 					data,
 				});
-				socket.broadcast.to(id).emit('data', data);
+				socket.broadcast.to(id).emit('data', {
+					from: socket.id,
+					data,
+				});
 			});
 
 			socket.on('data', data => {
@@ -48,7 +51,10 @@ export default class Server {
 					data
 				});
 
-				socket.broadcast.emit('data', data);
+				socket.broadcast.emit('data', {
+					from: socket.id,
+					data,
+				});
 			});
 		});
 	}
