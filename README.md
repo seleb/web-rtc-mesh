@@ -15,22 +15,22 @@ You can also edit `./src/config.js`.
 
 ## use
 
-- `yarn build`: Builds the client to `./dist/Vertex.js`.
-- `yarn start`: Starts the signalling server.
+- `npm run build`: Builds the client to `./dist/client.js`.
+- `npm run start`: Starts the signalling server.
 
 ## example
 
 ```js
-<script src="https://<server_url>/Vertex.js"></script>
+<script src="https://<server_url>/client.js"></script>
 <script>
-	const vertex = new window.Vertex.default({
+	const client = new window.Client.default({
 		host: "wss://<server_url>",
-		onDate: event => {
-			// received a data channel message in `event.data`
-		}
-	}
-	);
-	vertex.broadcast({
+		room: "myRoom",
+	});
+	client.on(window.Client.DATA, ({ from, data }) => {
+		console.log("received",data,"from",from);
+	});
+	client.broadcast({
 		key: "value"
 	}); // send a data channel message to all connected vertices
 </script>

@@ -1,22 +1,27 @@
 {
 	"name": "web-rtc-mesh",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "Signalling server + client for creating P2P data connections",
 	"repository": "github:seleb/web-rtc-mesh",
-	"main": "main.js",
 	"scripts": {
-		"build": "node --experimental-modules ./build.mjs"
+		"build": "node --experimental-modules ./build.mjs",
+		"build:prod": "cross-env NODE_ENV=production npm run build",
+		"build:dev": "cross-env NODE_ENV=development npm run build",
+		"start": "node --experimental-modules ./src/server/main.mjs",
+		"start:prod": "cross-env NODE_ENV=production npm run start",
+		"start:dev": "cross-env NODE_ENV=development DEBUG=web-rtc-mesh:* npm run start"
 	},
 	"author": "Sean S. LeBlanc <sean.s.leblanc@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
-		"bufferutil": "^3.0.4",
+		"debug": "^3.1.0",
 		"express": "^4.16.3",
-		"utf-8-validate": "^4.0.1",
-		"webrtc-adapter": "^6.1.5",
-		"ws": "^5.1.1"
+		"simple-peer": "^9.1.2",
+		"socket.io": "^2.1.1",
+		"socket.io-client": "^2.1.1"
 	},
 	"devDependencies": {
+		"cross-env": "^5.2.0",
 		"webpack": "^4.5.0"
 	}
 }
