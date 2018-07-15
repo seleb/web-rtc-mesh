@@ -4,8 +4,9 @@ import {
 	EventEmitter
 } from 'events';
 
-export const JOINED = 'vertex:joined';
+export const JOIN = 'vertex:join';
 export const DATA = 'vertex:data';
+export const CLOSE = 'vertex:close';
 
 export default class Vertex extends EventEmitter {
 	constructor({
@@ -40,7 +41,7 @@ export default class Vertex extends EventEmitter {
 					initiator: true,
 				});
 			});
-			this.emit(JOINED);
+			this.emit(JOIN);
 		});
 
 		this.peers = {};
@@ -103,10 +104,17 @@ export default class Vertex extends EventEmitter {
 			console.error(error);
 			connection.destroy();
 			delete this.peers[id];
+			this.emit(CLOSE, {
+				error,
+				id,
+			});
 		});
 		connection.on('close', () => {
 			connection.destroy();
 			delete this.peers[id];
+			this.emit(CLOSE, {
+				id,
+			});
 		});
 
 		this.peers[id] = peer;

@@ -1,8 +1,8 @@
 export {
-	JOINED,
+	JOIN,
 	DATA,
-}
-from './Vertex';
+	CLOSE,
+} from './Vertex';
 
 import Vertex from './Vertex';
 export default Vertex;
