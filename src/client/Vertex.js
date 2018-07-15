@@ -15,8 +15,8 @@ export default class Vertex extends EventEmitter {
 	}) {
 		super();
 		this.signaller = createIoClient(host);
-		this.signaller.on('data', data => {
-			this.onSignal(data);
+		this.signaller.on('data', signal => {
+			this.onSignal(signal);
 		});
 		this.signaller.on('connect', () => {
 			this.signaller.emit('join', {
@@ -114,10 +114,10 @@ export default class Vertex extends EventEmitter {
 	}
 
 	onSignal({
-		signal,
+		data,
 		from,
 	}) {
-		if (!signal || !from) {
+		if (!data || !from) {
 			throw new Error('recieved invalid signal');
 		}
 		let peer = this.peers[from];
@@ -129,6 +129,6 @@ export default class Vertex extends EventEmitter {
 			});
 		}
 
-		peer.connection.signal(signal);
+		peer.connection.signal(data);
 	}
 }
