@@ -15,6 +15,7 @@ export default class Vertex extends EventEmitter {
 		userId,
 	}) {
 		super();
+		this.peers = {};
 		this.signaller = createIoClient(host);
 		this.signaller.on('data', signal => {
 			this.onSignal(signal);
@@ -44,7 +45,17 @@ export default class Vertex extends EventEmitter {
 			this.emit(JOIN);
 		});
 
-		this.peers = {};
+		window.addEventListener('beforeunload', () => {
+			this.disconnect();
+		});
+	}
+
+	disconnect() {
+		Object.values(this.peers)
+			.forEach(({
+				connection
+			}) => connection.destroy());
+		this.signaller.disconnect();
 	}
 
 	// send to one
