@@ -49,8 +49,12 @@ export default class Vertex extends EventEmitter {
 	// send to one
 	send(id, message) {
 		const {
-			connection,
-		} = this.peers[id];
+			peers: {
+				[id]: {
+					connection,
+				} = {},
+			} = {},
+		} = this;
 		if (connection) {
 			const str = JSON.stringify(message);
 			connection.send(str);
