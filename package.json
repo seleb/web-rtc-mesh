@@ -4,12 +4,12 @@
 	"description": "Signalling server + client for creating P2P data connections",
 	"repository": "github:seleb/web-rtc-mesh",
 	"scripts": {
-		"build": "node --experimental-modules ./build.mjs",
-		"build:prod": "cross-env NODE_ENV=production npm run build",
-		"build:dev": "cross-env NODE_ENV=development npm run build",
-		"start": "node --experimental-modules ./src/server/main.mjs",
-		"start:prod": "cross-env NODE_ENV=production npm run start",
-		"start:dev": "cross-env NODE_ENV=development DEBUG=web-rtc-mesh:* npm run start"
+		"build:base": "node --experimental-modules ./build.mjs",
+		"build": "cross-env NODE_ENV=production npm run build:base",
+		"build:dev": "cross-env NODE_ENV=development npm run build:base",
+		"start:base": "node --experimental-modules ./src/server/main.mjs",
+		"start": "npm run build && cross-env NODE_ENV=production npm run start:base",
+		"start:dev": "cross-env NODE_ENV=development DEBUG=web-rtc-mesh:* npm run start:base"
 	},
 	"author": "Sean S. LeBlanc <sean.s.leblanc@gmail.com>",
 	"license": "MIT",

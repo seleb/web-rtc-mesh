@@ -15,8 +15,11 @@ You can also edit `./src/config.js`.
 
 ## use
 
-- `npm run build`: Builds the client to `./dist/client.js`.
-- `npm run start`: Starts the signalling server.
+```sh
+npm run start
+```
+
+This will builds the client to `./dist/client.js` and start the signalling server.
 
 ## example
 
