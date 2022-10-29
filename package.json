@@ -22,7 +22,7 @@
 	},
 	"devDependencies": {
 		"cross-env": "^5.2.0",
-		"webpack": "^4.5.0"
+		"webpack": "^4.46.0"
 	},
 	"engines": {
 		"node": ">=10.4.0"
